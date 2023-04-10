@@ -11,7 +11,7 @@ parser.add_argument("-sM", "--show-models", help="Show installed models")
 parser.add_argument("-gM", "--get-model", help="Install model")
 parser.add_argument("-rM", "--remove-model", help="Uninstall model")
 parser.add_argument("-db", "--database", help="Database file")
-parser.add_argument("-dbE", "--data-base-engine", help="Database engine") 
+parser.add_argument("-dbE", "--database-engine", help="Database engine") 
 
 txtFile = open("new_text.txt")
 txtStr = txtFile.read()

@@ -19,9 +19,9 @@ txtFile.close()
 
 txt = nlp(txtStr)
 
-def dbUpdate(token,db,dbtype):
+def dbUpdate(lexeme,db,dbtype):
 	
-	if(dbQuery(token) == None):
+	if(dbQuery(lexeme) == None):
 		insertNewToken(token)
 	else:
 		updateToken(token)

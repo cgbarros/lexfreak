@@ -3,47 +3,46 @@ from datetime import date
 today = date.today()
 
 def createTables(db):
-	createWordsTable = """
-		CREATE TABLE IF NOT EXISTS words(
-			word TEXT PRIMARY KEY,
+	createLexemesTable = """
+		CREATE TABLE IF NOT EXISTS lexemes(
+			lexeme TEXT PRIMARY KEY,
 			freq INTEGER,
 			studied INTEGER,
 			added_on TEXT
 		);
 	"""
-	
-createVariantsTable = """
-	CREATE TABLE IF NOT EXISTS variants(
-		variant TEXT PRIMARY KEY,
-		lexem TEXT,
-		freq INTEGER,
-		studied INTEGER,
-		added_on TEXT
-	);
-	"""
-saveFile = ".save" + file
-db.execute(createWordsTable)
-db.execute(createVariantsTable)
-db.execute(saveFile)
-return True
+	createVariantsTable = """
+		CREATE TABLE IF NOT EXISTS variants(
+			variant TEXT PRIMARY KEY,
+			lexeme TEXT,
+			freq INTEGER,
+			studied INTEGER,
+			added_on TEXT
+		);
+		"""
+	saveFile = ".save " + file
+	db.execute(createLexemesTable)
+	db.execute(createVariantsTable)
+	db.execute(saveFile)
+	return True
 
 def connect(file):
 	return sqlite3.connect(file)
 
-def lemmaQuery(db,lemma):
-	lemmaQuery = "SELECT * FROM words WHERE word = '" + lemma + "'"
-	return db.execute(lemmaQuery).fetchone()
+def lexemeQuery(db,lexeme):
+	lexemeQuery = "SELECT * FROM lexemes WHERE lexeme = '" + lexeme + "'"
+	return db.execute(lexemeQuery).fetchone()
 
 def variantQuery(db,variant):	
 	variantQuery = "SELECT * FROM variants WHERE variant = '" + variant + "'"
 	return db.execute(variantQuery).fetchone()
 
-def insertWord(word,db):
+def insertLexeme(lexeme,db):
 	insertCommand = "".join([
-		"INSERT INTO words ",
-		"(word,freq,studied,added_on) ",
+		"INSERT INTO lexemes ",
+		"(lexeme,freq,studied,added_on) ",
 		"VALUES ('",
-		word,
+		lexeme,
 		"', ",
 		"1, ",
 		"FALSE, '",
@@ -52,26 +51,26 @@ def insertWord(word,db):
 	db.execute(insertCommand)
 	return True
 	
-def updateWord(word,freq,db):
-		freq = lemmaResult[1] + 1 # TODO: update to query word and get word freq
+def updateToken(lexeme,variant,freq,db):
+	  lexemeResult = lexemeQuery(lexeme,db)
+		freq = lexemeResult[1] + 1
 		insertCommand = " ".join([
-			"UPDATE words",
+			"UPDATE lexemes",
 			"SET freq =",
 			str(freq),
 			"WHERE",
-			"word =",
-			"'" + token.lemma_ + "'"
+			"lexeme =",
+			"'" + lexeme + "'"
 		])
 	db.execute(insertCommand)
-
 
 	if(variantResult == None):
 		variantInsertCommand = " ".join([
 			"INSERT INTO variants",
 			"(variant,lexem,freq,studied,added_on)",
 			"VALUES",
-			"('" + token.text.lower() + "',",
-			"'" + token.lemma_ + "',",
+			"('" + variant.text.lower() + "',",
+			"'" + lexem + "',",
 			"1,"
 			"FALSE,"
 			"'" + today.strftime("%Y-%m-%d") + "')"
@@ -84,7 +83,7 @@ def updateWord(word,freq,db):
 			str(variantFreq),
 			"WHERE",
 			"variant =",
-			"'" + token.text.lower() + "'"
+			"'" + variant.text.lower() + "'"
 		])
 	db.execute(variantInsertCommand)
 	db.commit()

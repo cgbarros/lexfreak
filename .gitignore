@@ -2,3 +2,5 @@ todo.md
 *.sql
 *.db
 test_text.txt
+*.nix
+.replit

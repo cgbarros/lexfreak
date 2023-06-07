@@ -1,16 +1,16 @@
 TODO:
-- [ ] use a different database
 - [ ] go through the database and
   - [ ] mark studied words
   - [ ] remove words (with confirmation)
+- [ ] abstract ml engine
 - [ ] ignore prepositions
-- [ ] send to flashcard program
+- [ ] send to flashcard software
   - [ ] quizlet (and mark as studied)
 - [ ] web view (different repo)
-- [ ] config file to setup :
+- [ ] config file to setup:
   - [ ] database file
-  - [ ] database type
+  - [ ] database engine
   - [ ] input file
-  - [ ] model
+  - [ ] ml model
 - [ ] installer to download model and create database file
-- [ ] abstract ml engine 
+- [ ] use a different database

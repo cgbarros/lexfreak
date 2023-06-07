@@ -51,7 +51,7 @@ def insertLexeme(lexeme,db):
 	db.execute(insertCommand)
 	return True
 	
-def updateToken(lexeme,variant,freq,db):
+def updateLexeme(lexeme,variant,db):
 	  lexemeResult = lexemeQuery(lexeme,db)
 		freq = lexemeResult[1] + 1
 		insertCommand = " ".join([

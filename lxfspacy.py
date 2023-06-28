@@ -1,15 +1,10 @@
 # user needs to choose model language 
 
-# i made a prototype for the choosing language function, its commented below
-# def whatlanguage(str):
-#   import spacy
-#   nlp = spacy.load(str + "_core_news_sm")
 
+import spacy 
 
-
-#import spacy
-import spacy
-nlp = spacy.load("pt_core_news_sm")
+def nlp(str):
+  return spacy.load(str)
 
 #function getLexemes
 def getLexemes(txt):
@@ -21,5 +16,4 @@ def getLexemes(txt):
   return(lexemeList)
 
 
-#merge with gitHub
 

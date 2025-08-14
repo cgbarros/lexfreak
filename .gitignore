@@ -1,6 +1,8 @@
 todo.md
 *.sql
 *.db
-test_text.txt
+tests/*.txt
+tests/*.pdf
 *.nix
 .replit
+__pycache__

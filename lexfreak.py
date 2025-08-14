@@ -7,6 +7,12 @@ import module_translator
 ## Main procedures
 
 def count(args):
+    title = args.title if args.title else args.input
+    url = args.url if args.url else args.input
+    reference_id = str(uuid.uuid4())
+
+    print(f"Loading modules '{args.db_engine}' and '{args.nlp_engine}'")
+    
     (
       db,
       create_tables,
@@ -19,23 +25,39 @@ def count(args):
       extract_lexeme_and_variant
     ) = module_translator.set_count_functions(args.db_engine, args.nlp_engine, args.language)
 
-    reference_id = str(uuid.uuid4())
-
-    title = args.title if args.title else args.input
-    url = args.url if args.url else args.input
-
+    print("Modules loaded. Connecting to the database.")
     create_tables(db)
+
+    print(f"Upserting reference {title}")
     upsert_reference(db, reference_id, title, args.author, url, args.language)
+
+    # print("[DEBUG] testing the tables")
+    # cursor = db.cursor()
+    # cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    # tables = cursor.fetchall()
+
+    # Getting the total number of lines
+
     with open(args.input, "r") as f:
+        line_total = sum(1 for _ in f)
+
+    with open(args.input, "r") as f:
+        line_counter = 0
         for line in f:
+            line_counter += 1
+            print(f"Processing line {line_counter} of {line_total}")
             tokens = nlp(line)
             for token in tokens:
-                lexeme, variant = extract_lexeme_and_variant(token)
+                extracted_props = extract_lexeme_and_variant(token)
+                if not extracted_props:
+                    continue
+                lexeme, variant = extracted_props
                 upsert_lexeme(db, lexeme, args.language)
                 upsert_variant(db, variant, lexeme, args.language)
                 link_reference_variant_lexeme(db, reference_id, variant, lexeme, args.language)
     
-    close_connection()
+    close_connection(db)
+    print("Done!")
 
 def show(args):
     (
@@ -109,4 +131,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-print("done")

@@ -31,5 +31,7 @@ def load_model(language_code):
     return spacy.load(model_name)
 
 def extract_lexeme_and_variant(token):
+    if not token.is_alpha:
+        return False
     # Returns (lexeme, variant)
     return (token.lemma_.lower(), token.text.lower())
